@@ -45,12 +45,10 @@ try {
                 </div>
             <?php endif; ?>
 
-            <!-- Total Count -->
             <div class="total-count">
                 <h2>Total Accidente: <?php echo count($accidents); ?></h2>
             </div>
 
-            <!-- Accidents List -->
             <?php if (empty($accidents)): ?>
                 <div class="no-accidents">
                     <h3>Nu au fost găsite accidente</h3>
@@ -64,10 +62,6 @@ try {
                         </div>
                         
                         <div class="accident-info">
-                            <div class="info-row">
-                                <span class="info-label">Locație:</span>
-                                <span class="info-value"><?php echo htmlspecialchars($accident['LOCATION'] ?? $accident['location'] ?? 'Necunoscută'); ?></span>
-                            </div>
                             
                             <div class="info-row">
                                 <span class="info-label">Tip:</span>

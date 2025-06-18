@@ -7,6 +7,30 @@ $message = '';
 $message_type = '';
 $user_data = [];
 
+$map_locations = [
+    'JUNK JUNCTION' => ['x' => 189, 'y' => 110],
+    'HAUNTED HILLS' => ['x' => 156, 'y' => 169],
+    'PLEASANT PARK' => ['x' => 180, 'y' => 301],
+    'SNOBBY SHORES' => ['x' => 69, 'y' => 467],
+    'GREASY GROVE' => ['x' => 180, 'y' => 635],
+    'SHIFTY SHAFTS' => ['x' => 280, 'y' => 695],
+    'FROSTY FLIGHTS' => ['x' => 69, 'y' => 775],
+    'FLUSH FACTORY' => ['x' => 280, 'y' => 835],
+    'LUCKY LANDING' => ['x' => 400, 'y' => 950],
+    'FATAL FIELDS' => ['x' => 500, 'y' => 807],
+    'SALTY SPRINGS' => ['x' => 570, 'y' => 636],
+    'DUSTY DIVOT' => ['x' => 570, 'y' => 486],
+    'LOOT LAKE' => ['x' => 400, 'y' => 390],
+    'TILTED TOWERS' => ['x' => 280, 'y' => 515],
+    'LAZY LINKS' => ['x' => 540, 'y' => 226],
+    'RISKY REELS' => ['x' => 760, 'y' => 205],
+    'WAILING WOODS' => ['x' => 820, 'y' => 287],
+    'TOMATO TEMPLE' => ['x' => 670, 'y' => 340],
+    'LONELY LODGE' => ['x' => 870, 'y' => 433],
+    'RETAIL ROW' => ['x' => 720, 'y' => 570],
+    'PARADISE PALMS' => ['x' => 870, 'y' => 767]
+];
+
 try {
     $stmt = $pdo->prepare("SELECT id, username, email, address, latitude, longitude, created_at FROM users WHERE id = :user_id");
     $stmt->bindParam(':user_id', $_SESSION['user_id']);
@@ -28,12 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action'] === 'update_profile') {
             $username = trim($_POST['username'] ?? '');
             $email = trim($_POST['email'] ?? '');
-            $address = trim($_POST['address'] ?? '');
-            $latitude = trim($_POST['latitude'] ?? '');
-            $longitude = trim($_POST['longitude'] ?? '');
+            $selected_location = trim($_POST['location'] ?? '');
             
-            $latitude = !empty($latitude) ? floatval($latitude) : null;
-            $longitude = !empty($longitude) ? floatval($longitude) : null;
+            $latitude = null;
+            $longitude = null;
+            $address = '';
+            
+            if (!empty($selected_location) && isset($map_locations[$selected_location])) {
+                $latitude = $map_locations[$selected_location]['x']; 
+                $longitude = $map_locations[$selected_location]['y']; 
+                $address = $selected_location;
+            }
             
             if (empty($username) || empty($email)) {
                 $message = 'Username și email sunt obligatorii';
@@ -97,14 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message_type = 'error';
             } else {
                 try {
-
+                    
                     $stmt = $pdo->prepare("SELECT password FROM users WHERE id = :user_id");
                     $stmt->bindParam(':user_id', $_SESSION['user_id']);
                     $stmt->execute();
                     $stored_password = $stmt->fetchColumn();
                     
                     if ($current_password === $stored_password) {
-
+                        
                         $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :user_id");
                         $stmt->bindParam(':password', $new_password);
                         $stmt->bindParam(':user_id', $_SESSION['user_id']);
@@ -124,6 +153,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+}
+
+$current_location = '';
+if (!empty($user_data['address'])) {
+    $current_location = $user_data['address'];
 }
 ?>
 
@@ -146,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main>
-        <?php if (!empty($message)): ?>
+       <?php if (!empty($message)): ?>
             <div class="message <?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
@@ -170,25 +204,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <div class="form-group">
-                    <label for="address">Adresă:</label>
-                    <textarea id="address" name="address" placeholder="Introduceți adresa"><?php echo htmlspecialchars($user_data['address'] ?? ''); ?></textarea>
+                    <label for="location">Locație pe hartă:</label>
+                    <select id="location" name="location" class="location-dropdown">
+                        <option value="">Selectează o locație...</option>
+                        <?php foreach ($map_locations as $location => $coords): ?>
+                            <option value="<?php echo htmlspecialchars($location); ?>" 
+                                    <?php echo ($current_location === $location) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($location); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="location-info">
+                        Selectează locația ta preferată din harta Fortnite
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="latitude">Latitudine:</label>
-                    <input type="text" id="latitude" name="latitude" 
-                           value="<?php echo htmlspecialchars($user_data['latitude'] ?? ''); ?>" 
-                           placeholder="">
-                </div>
+                <?php if (!empty($current_location) && isset($map_locations[$current_location])): ?>
+                    <div class="coordinates-display">
+                        <strong>Locație curentă:</strong> <?php echo htmlspecialchars($current_location); ?><br>
+                        <strong>Coordonate:</strong> X=<?php echo $map_locations[$current_location]['x']; ?>, Y=<?php echo $map_locations[$current_location]['y']; ?>
+                    </div>
+                <?php endif; ?>
                 
-                <div class="form-group">
-                    <label for="longitude">Longitudine:</label>
-                    <input type="text" id="longitude" name="longitude" 
-                           value="<?php echo htmlspecialchars($user_data['longitude'] ?? ''); ?>" 
-                           placeholder="">
-                </div>
-                
-                <button type="submit" class="btn">Actualizează Profilul</button>
+                <button type="submit" class="btn" style="margin-top: 20px;">Actualizează Profilul</button>
             </form>
         </div>
 

@@ -84,3 +84,61 @@ main p {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+.map-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.map-container h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.map-wrapper {
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fortnite-map {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+}
+
+.map-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.child-marker, .parent-marker {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.child-marker {
+    background: #03cece;
+}
+
+.parent-marker {
+    background: #ff028d;
+}
+
