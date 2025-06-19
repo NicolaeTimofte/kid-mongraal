@@ -1,0 +1,47 @@
+.feature-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 4rem auto;
+  padding: 1rem;
+  /*max-width: 1000px;*/
+}
+
+.banana-inferno{
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+  max-width: 65%; 
+  border-radius: 8px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  object-fit: cover;
+}
+
+.feature-box {
+  max-width: 30%;
+  background-color: #000000;
+  padding: 2rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.feature-box ul {
+  list-style: disc outside;
+  padding-left: 1.4em;
+  margin: 0;
+}
+
+.feature-box li {
+  font-size: 1.6rem;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  transition: color 0.4s ease, font-weight 0.4s ease;
+}
+
+.feature-box li.active {
+  color: #0ff;
+  font-weight: bold;
+}

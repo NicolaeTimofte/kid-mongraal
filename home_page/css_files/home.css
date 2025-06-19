@@ -1,0 +1,257 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  /*justify-content: space-between;*/
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  z-index: 10;
+}
+
+.authentication-actions{
+  display: flex;
+  gap: 0.5rem;  
+}
+
+.other-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.other-actions button{
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background: #333;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+
+.other-actions button:hover{
+  background-color: #00ccff;
+}
+
+/*
+.auth-form {
+  margin: 0;
+}
+*/
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.4s ease;
+  cursor: pointer;  
+}
+
+.logo:hover {
+  color: aqua;
+}
+
+.btn-login {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+.btn-login:hover {
+  background: #00ccff;
+}
+
+.btn-register {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+
+.btn-register:hover {
+  background: #00ccff;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  height: calc(50vh - 60px);
+}
+
+.hero .quote{
+  font-size: 3rem;
+  letter-spacing: 0.02em;
+  font-family: "Helvetica Neue", Monospace, Arial;
+  font-kerning: normal;
+  font-style: normal;
+  line-height: 1.1; 
+  font-weight: 600;   
+  /*color: #000000;*/
+  margin: 0;
+  transition: color 1s ease;
+}
+
+.encrypted {
+  color: #A8E6CF;
+}
+
+.decrypted {
+  color: #000000;
+}
+
+.hero h1 {
+  font-size: 7rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #000;
+  margin: 0;
+}
+
+/*for the date*/
+.hero .date-container {
+  margin-bottom: 0.5rem;
+}
+
+.creator {
+  margin-top: 5rem;
+  font-family: "Brush Script MT", cursive;
+  font-size: 4rem;
+  color: #d4af37;
+  text-align: center;
+}
+
+.creator .Strix_modifier{
+  color: #8B0000;
+}
+
+.date-container{
+    display:flex;
+    align-items: center;
+}
+
+.date-label {
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  color: #444;
+}
+
+.date-input {
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  color: #333;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 130px;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #888;
+  background-color: #f7f7f7;
+}
+
+.my-gif {
+  display: block;
+  width: 400px;
+  height: auto;   
+  align-self: center;
+  margin: 4rem;
+}
+
+.MR-INSANE{
+  margin: 10rem;
+}
+
+.insane-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+
+.hero-message{
+  margin: 7rem 0 auto;
+
+  opacity: 0;
+  transform: translateY(20px);
+
+  transition: 
+  opacity 0.7s ease-out,
+  transform 0.7s ease-out;
+}
+
+.hero-message.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-message h2{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 4rem;
+  line-height: 1.1;
+  font-weight: 700; 
+  color: #111;
+  letter-spacing: 0;
+  margin: 0;
+  max-width: 55%;
+}
+
+.hero-message p{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-weight: 400; 
+  max-width: 70%;
+  color: #111;
+  letter-spacing: 0;
+  margin: 1.5rem 0 2.5rem 0; 
+}
+
+.insane-container p {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  font-weight: 400; 
+  color: #111;
+  flex: 1;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.insane-photo {
+  flex-shrink: 0;
+  width: 440px;
+  height: auto;
+  border-radius: 4px;
+}
