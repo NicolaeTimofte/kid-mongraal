@@ -8,47 +8,96 @@ document.addEventListener("DOMContentLoaded", () => {
     user: 'rgb(255, 2, 141)'
   };
   const INTERVAL = 3000;
+  
+  // original dimension
+  const ORIGINAL_WIDTH = 1080;
+  const ORIGINAL_HEIGHT = 1080;
+  
+  function scaleCoordinates(x, y) {
+    const scaleX = canvas.width / ORIGINAL_WIDTH;
+    const scaleY = canvas.height / ORIGINAL_HEIGHT;
+    return {
+      x: x * scaleX,
+      y: y * scaleY
+    };
+  }
+  
+  function scaleSize(size) {
+    const scale = Math.min(canvas.width / ORIGINAL_WIDTH, canvas.height / ORIGINAL_HEIGHT);
+    return Math.max(size * scale, 3); 
+  }
+  
+  function resizeCanvas() {
+    const container = canvas.parentElement;
+    const containerRect = container.getBoundingClientRect();
+    
+    const aspectRatio = ORIGINAL_WIDTH / ORIGINAL_HEIGHT;
+    
+    let newWidth = containerRect.width;
+    let newHeight = newWidth / aspectRatio;
+    
+    if (newHeight > containerRect.height) {
+      newHeight = containerRect.height;
+      newWidth = newHeight * aspectRatio;
+    }
+    
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    
+    canvas.style.width = newWidth + 'px';
+    canvas.style.height = newHeight + 'px';
+  }
 
   function drawDot(x, y, color, radius = 6) {
+    const scaled = scaleCoordinates(x, y);
+    const scaledRadius = scaleSize(radius);
+    
     ctx.fillStyle = color;//set fill color
     ctx.beginPath();//start a new shape
-    ctx.arc(x, y, radius, 0, 2 * Math.PI);//draw a circle centered at (x,y)
+    ctx.arc(scaled.x, scaled.y, scaledRadius, 0, 2 * Math.PI);//draw a circle centered at (x,y)
     ctx.fill();//actually fill it in
   }
 
   //used for drawing accidents on the fortnut map
   function drawX(x, y, color, size = 6, thickness = 4) {
+    const scaled = scaleCoordinates(x, y);
+    const scaledSize = scaleSize(size);
+    const scaledThickness = scaleSize(thickness);
+    
     ctx.strokeStyle = color;//set line color
-    ctx.lineWidth = thickness;
+    ctx.lineWidth = scaledThickness;
     ctx.beginPath();//start a new shape
-    ctx.moveTo(x - size, y - size);
-    ctx.lineTo(x + size, y + size);
-    ctx.moveTo(x + size, y - size);
-    ctx.lineTo(x - size, y + size);
+    ctx.moveTo(scaled.x - scaledSize, scaled.y - scaledSize);
+    ctx.lineTo(scaled.x + scaledSize, scaled.y + scaledSize);
+    ctx.moveTo(scaled.x + scaledSize, scaled.y - scaledSize);
+    ctx.lineTo(scaled.x - scaledSize, scaled.y + scaledSize);
     ctx.stroke();//draw the two diagonal lines
   }
 
   function drawLabel(x, y, text, color = 'white') {
-    ctx.font = '14px "Helvetica Neue"';
-    const padding = 4;
-    const lineH = 12;//approx text height
+    const scaled = scaleCoordinates(x, y);
+    const fontSize = Math.max(scaleSize(14), 10); // Minimum 10px pentru lizibilitate
+    
+    ctx.font = `${fontSize}px "Helvetica Neue"`;
+    const padding = scaleSize(4);
+    const lineH = fontSize * 0.8;//approx text height
     const textW = ctx.measureText(text).width;
   
     //box dimensions
     const boxW = textW + padding * 2;
     const boxH = lineH + padding * 2;
-    const boxX = x - boxW / 2;
-    const boxY = y - 10 - boxH;//10px above the dot
+    const boxX = scaled.x - boxW / 2;
+    const boxY = scaled.y - scaleSize(10) - boxH;//10px above the dot
   
     //draw semi-transparent box
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     ctx.fillRect(boxX, boxY, boxW, boxH);
   
     //draw centered text
     ctx.fillStyle = color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, x, boxY + boxH / 2);
+    ctx.fillText(text, scaled.x, boxY + boxH / 2);
   }
 
   //lagged implementation
@@ -95,12 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
         accidents = data.accidents;
         userPos = data.user;
         lastFetch = performance.now();
-        
       })
       .catch(e => console.error(e));
   }
-  setInterval(updateData, INTERVAL);//repeat after specific interval
-  updateData();//initial fetch
 
   //smooth transition
   function animate() {
@@ -111,20 +157,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nextKids.forEach(k => {
       const prev = prevKids.find(p => p.name === k.name) || k; //if k in next exists in prev as well, we put in prev its old info
-      const x = prev.x + (k.x - prev.x)*t;
-      const y = prev.y + (k.y - prev.y)*t;
+      const x = prev.x + (k.x - prev.x) * t;
+      const y = prev.y + (k.y - prev.y) * t;
       drawDot(x, y, colors.child);
-      const [firstName, lastName] = k.name.split(' ');
+      const [firstName] = k.name.split(' ');
       drawLabel(x, y, firstName);
     });
 
     accidents.forEach(a => drawX(a.x, a.y, colors.accident));
 
     if (userPos) 
-          drawDot(userPos.x, userPos.y, colors.user, 8);
+      drawDot(userPos.x, userPos.y, colors.user, 8);
 
     requestAnimationFrame(animate);
   }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+  });
+  
+  window.addEventListener('orientationchange', () => {
+    setTimeout(resizeCanvas, 100); 
+  });
+
+  resizeCanvas();
+  setInterval(updateData, INTERVAL);//repeat after specific interval
+  updateData();//initial fetch
   requestAnimationFrame(animate);
 });
-
