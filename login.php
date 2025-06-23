@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $username_db = $user['USERNAME'] ?? $user['username'] ?? '';
                     $password_db = $user['PASSWORD'] ?? $user['password'] ?? '';
 
-                    if ($user && !empty($password_db) && $password === $password_db) {
+                    if ($user && !empty($password_db) && password_verify($password, $password_db)) {
                         $_SESSION['user_id'] = $user_id;
                         $_SESSION['username'] = $username_db;
                         
@@ -90,10 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $message = 'Username-ul sau email-ul există deja';
                         $message_type = 'error';
                     } else {
+                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                         $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
                         $stmt->bindParam(':username', $username);
                         $stmt->bindParam(':email', $email);
-                        $stmt->bindParam(':password', $password);
+                        $stmt->bindParam(':password', $hashed_password);
                         $stmt->execute();
 
                         $message = 'Cont creat cu succes! Poți să te loghezi acum.';

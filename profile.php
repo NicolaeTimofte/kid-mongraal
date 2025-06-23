@@ -8,27 +8,27 @@ $message_type = '';
 $user_data = [];
 
 $map_locations = [
-    'JUNK JUNCTION' => ['x' => 189, 'y' => 110],
-    'HAUNTED HILLS' => ['x' => 156, 'y' => 169],
-    'PLEASANT PARK' => ['x' => 180, 'y' => 301],
-    'SNOBBY SHORES' => ['x' => 69, 'y' => 467],
-    'GREASY GROVE' => ['x' => 180, 'y' => 635],
-    'SHIFTY SHAFTS' => ['x' => 280, 'y' => 695],
+    'JUNK JUNCTION' => ['x' => 209, 'y' => 129],
+    'HAUNTED HILLS' => ['x' => 227, 'y' => 200],
+    'PLEASANT PARK' => ['x' => 304, 'y' => 278],
+    'SNOBBY SHORES' => ['x' => 55, 'y' => 507],
+    'GREASY GROVE' => ['x' => 209, 'y' => 668],
+    'SHIFTY SHAFTS' => ['x' => 438, 'y' => 647],
     'FROSTY FLIGHTS' => ['x' => 69, 'y' => 775],
-    'FLUSH FACTORY' => ['x' => 280, 'y' => 835],
-    'LUCKY LANDING' => ['x' => 400, 'y' => 950],
-    'FATAL FIELDS' => ['x' => 500, 'y' => 807],
-    'SALTY SPRINGS' => ['x' => 570, 'y' => 636],
-    'DUSTY DIVOT' => ['x' => 570, 'y' => 486],
-    'LOOT LAKE' => ['x' => 400, 'y' => 390],
-    'TILTED TOWERS' => ['x' => 280, 'y' => 515],
-    'LAZY LINKS' => ['x' => 540, 'y' => 226],
-    'RISKY REELS' => ['x' => 760, 'y' => 205],
-    'WAILING WOODS' => ['x' => 820, 'y' => 287],
-    'TOMATO TEMPLE' => ['x' => 670, 'y' => 340],
-    'LONELY LODGE' => ['x' => 870, 'y' => 433],
-    'RETAIL ROW' => ['x' => 720, 'y' => 570],
-    'PARADISE PALMS' => ['x' => 870, 'y' => 767]
+    'FLUSH FACTORY' => ['x' => 348, 'y' => 936],
+    'LUCKY LANDING' => ['x' => 634, 'y' => 913],
+    'FATAL FIELDS' => ['x' => 687, 'y' => 771],
+    'SALTY SPRINGS' => ['x' => 571, 'y' => 580],
+    'DUSTY DIVOT' => ['x' => 604, 'y' => 438],
+    'LOOT LAKE' => ['x' => 450, 'y' => 372],
+    'TILTED TOWERS' => ['x' => 387, 'y' => 573],
+    'LAZY LINKS' => ['x' => 532, 'y' => 178],
+    'RISKY REELS' => ['x' => 788, 'y' => 183],
+    'WAILING WOODS' => ['x' => 940, 'y' => 259],
+    'TOMATO TEMPLE' => ['x' => 674, 'y' => 372],
+    'LONELY LODGE' => ['x' => 995, 'y' => 524],
+    'RETAIL ROW' => ['x' => 875, 'y' => 515],
+    'PARADISE PALMS' => ['x' => 833, 'y' => 740]
 ];
 
 try {
@@ -126,16 +126,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message_type = 'error';
             } else {
                 try {
-                    
                     $stmt = $pdo->prepare("SELECT password FROM users WHERE id = :user_id");
                     $stmt->bindParam(':user_id', $_SESSION['user_id']);
                     $stmt->execute();
-                    $stored_password = $stmt->fetchColumn();
+                    $stored_password_hash = $stmt->fetchColumn();
                     
-                    if ($current_password === $stored_password) {
+                    if (password_verify($current_password, $stored_password_hash)) {
+                        $new_password_hash = password_hash($new_password, PASSWORD_DEFAULT);
                         
                         $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :user_id");
-                        $stmt->bindParam(':password', $new_password);
+                        $stmt->bindParam(':password', $new_password_hash);
                         $stmt->bindParam(':user_id', $_SESSION['user_id']);
                         $stmt->execute();
                         

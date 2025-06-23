@@ -1,5 +1,6 @@
 <?php
 require_once 'includes/session.php';
+require_once 'includes/admin.php'
 requireLogin();
 ?>
 
@@ -26,6 +27,10 @@ requireLogin();
         <a href="profile.php" class="btn">Profile</a>
         <a href="children.php" class="btn">Children</a>
         <a href="accidents.php" class="btn">Accidents</a>
+        <?php if (hasAdminAccess()): ?>
+        <a href="admin_accidents.php" class="btn">Admin Accidents</a>
+        <?php endif; ?>
+        <a href="api/export_data.php" class="btn">Export Data</a>
     </div>
     
     <div class="main-container">
