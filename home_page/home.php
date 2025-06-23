@@ -19,20 +19,7 @@
     <div class="logo">KiM</div>
 
     <div class="other-actions">
-      <!--memberships button-->
-      <form action="index.php" method="get" class="other-form">
-        <button type="submit" class="btn-memberships">MEMBERSHIPS</button>
-      </form>
-
-      <!--how-it-works button-->
-      <form action="index.php" method="get" class="other-form">
-        <button type="submit" class="btn-how-it-works">HOW IT WORKS</button>
-      </form>
-
-      <!--why-KiM button-->
-      <form action="index.php" method="get" class="other-form">
-        <button type="submit" class="btn-why-KiM">WHY KiM</button>
-      </form>
+      <a href="documentation.html" class="btn-memberships">DOCUMENTATION</a>
     </div>
 
     <div class="authentication-actions">
@@ -40,11 +27,7 @@
       <form action="../login.php" method="get" class="authentication-form">
         <button type="submit" class="btn-login">Sign In</button>
       </form>
-
-      <!--register button
-      <form action="../login.php" method="get" class="authentication-form">
-        <button type="submit" class="btn-register">Register</button>
-      </form>-->
+      
     </div>
   </nav>
 
