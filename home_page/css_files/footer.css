@@ -1,0 +1,49 @@
+.site-footer {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 1rem;/* vertical/horizontal padding */
+}
+
+.footer-container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5rem;
+  padding-right: 6rem;
+  gap: 2rem;
+}
+
+.footer-text {
+  flex: 1 1 70%;
+}
+
+.footer-text p,
+.footer-text ol {
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  font-size: 1.4rem;
+  color: #A8E6CF;
+  font-family: "Helvetica Neue";
+  font-weight: 700;
+}
+
+.footer-text ol {
+  padding-left: 1.2rem;
+}
+
+.my-gif {
+  max-width: 500px;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.my-gif2 {
+  max-width: 750px;
+  height: auto;
+  align-items: center;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
