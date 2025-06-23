@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css_files/relaxed-banana.css" />
   <link rel="stylesheet" href="css_files/accidents.css" />
   <link rel="stylesheet" href="css_files/party-and-friends.css" />
+  <link rel="stylesheet" href="css_files/footer.css" />
 </head>
 <body>
 
@@ -35,15 +36,15 @@
     </div>
 
     <div class="authentication-actions">
-      <!--login button-->
+      <!--log in button-->
       <form action="../login.php" method="get" class="authentication-form">
-        <button type="submit" class="btn-login">Log In</button>
+        <button type="submit" class="btn-login">Sign In</button>
       </form>
 
-      <!--register button-->
+      <!--register button
       <form action="../login.php" method="get" class="authentication-form">
         <button type="submit" class="btn-register">Register</button>
-      </form>
+      </form>-->
     </div>
   </nav>
 
@@ -137,7 +138,26 @@
 
 </main>
 
-  <img src="photos/gaara.gif" alt="Loading animation" class="my-gif">
+  <footer class="site-footer">
+    <div class="footer-container">
+
+      <div class="footer-text">
+        <p>Contact Info:</p>
+        <ol>
+          <li>Email: nicu.timofte04@yahoo.com, sebastian.lucanu@gmail.com, kim7support@insane.com</li>
+          <li>Instagram: nicu_rege, kilstrix</li>
+          <li>Chess.com: NicuTheGod, alexutzu2003</li>
+          <li>Youtube: KilStrix</li>
+        </ol>
+        <p>Thank you for visiting our website!</p>
+      </div>
+
+        <img src="photos/gaara.gif" alt="Loading animation" class="my-gif">
+
+    </div>
+
+</footer>
+  
 
   <script src="js_scripts/cycle-list.js"></script>
   <script src="js_scripts/quote_animation.js"></script>
