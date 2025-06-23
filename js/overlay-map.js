@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     accident: 'rgb(220, 53, 69)',
     user: 'rgb(255, 2, 141)'
   };
-  const INTERVAL = 2000;
+  const INTERVAL = 3000;
 
   function drawDot(x, y, color, radius = 6) {
     ctx.fillStyle = color;//set fill color
