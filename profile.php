@@ -43,7 +43,7 @@ try {
     }
 } catch(PDOException $e) {
     error_log("Error fetching user data: " . $e->getMessage());
-    $message = 'Eroare la încărcarea datelor';
+    $message = 'Error loading data';
     $message_type = 'error';
 }
 
@@ -65,10 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             if (empty($username) || empty($email)) {
-                $message = 'Username și email sunt obligatorii';
+                $message = 'Username and email fields are mandatory';
                 $message_type = 'error';
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $message = 'Email invalid';
+                $message = 'Invalid email';
                 $message_type = 'error';
             } else {
                 try {
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute();
                     
                     if ($stmt->fetch()) {
-                        $message = 'Username-ul sau email-ul sunt deja folosite';
+                        $message = 'Username or email is already in use!';
                         $message_type = 'error';
                     } else {
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $_SESSION['username'] = $username;
                         
-                        $message = 'Profilul a fost actualizat cu succes';
+                        $message = 'Profile successfully updated';
                         $message_type = 'success';
                         
                         $user_data['username'] = $username;
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 } catch(PDOException $e) {
                     error_log("Error updating profile: " . $e->getMessage());
-                    $message = 'Eroare la actualizarea profilului';
+                    $message = 'Error updating profile';
                     $message_type = 'error';
                 }
             }
@@ -116,13 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $confirm_password = $_POST['confirm_password'] ?? '';
             
             if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
-                $message = 'Toate câmpurile pentru parola sunt obligatorii';
+                $message = 'All fields are mandatory!';
                 $message_type = 'error';
             } elseif (strlen($new_password) < 6) {
-                $message = 'Parola nouă trebuie să aibă cel puțin 6 caractere';
+                $message = 'Password must have at least 6 characters';
                 $message_type = 'error';
             } elseif ($new_password !== $confirm_password) {
-                $message = 'Parolele noi nu se potrivesc';
+                $message = 'Passwords dont match';
                 $message_type = 'error';
             } else {
                 try {
@@ -139,15 +139,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->bindParam(':user_id', $_SESSION['user_id']);
                         $stmt->execute();
                         
-                        $message = 'Parola a fost schimbată cu succes';
+                        $message = 'Password changed successfully';
                         $message_type = 'success';
                     } else {
-                        $message = 'Parola curentă este incorectă';
+                        $message = 'Invalid current password';
                         $message_type = 'error';
                     }
                 } catch(PDOException $e) {
                     error_log("Error changing password: " . $e->getMessage());
-                    $message = 'Eroare la schimbarea parolei';
+                    $message = 'Error changing password';
                     $message_type = 'error';
                 }
             }
@@ -166,15 +166,15 @@ if (!empty($user_data['address'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil - KiD</title>
+    <title>KiM - Profile</title>
     <link rel="stylesheet" href="css/mainprofile.css">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Profil - <?php echo htmlspecialchars($user_data['username'] ?? ''); ?></h1>
+            <h1>Profile - <?php echo htmlspecialchars($user_data['username'] ?? ''); ?></h1>
             <div>
-                <a href="index.php" class="btn">Acasă</a>
+                <a href="index.php" class="home-btn">Map Page</a>
             </div>
         </nav>
     </header>
@@ -187,7 +187,7 @@ if (!empty($user_data['address'])) {
         <?php endif; ?>
 
         <div class="profile-form">
-            <h2>Informații Profil</h2>
+            <h2>Profile Information</h2>
             <form method="POST">
                 <input type="hidden" name="action" value="update_profile">
                 
@@ -204,9 +204,9 @@ if (!empty($user_data['address'])) {
                 </div>
                 
                 <div class="form-group">
-                    <label for="location">Locație pe hartă:</label>
+                    <label for="location">Location on map:</label>
                     <select id="location" name="location" class="location-dropdown">
-                        <option value="">Selectează o locație...</option>
+                        <option value="">Select a location...</option>
                         <?php foreach ($map_locations as $location => $coords): ?>
                             <option value="<?php echo htmlspecialchars($location); ?>" 
                                     <?php echo ($current_location === $location) ? 'selected' : ''; ?>>
@@ -215,7 +215,7 @@ if (!empty($user_data['address'])) {
                         <?php endforeach; ?>
                     </select>
                     <div class="location-info">
-                        Selectează locația ta preferată din harta Fortnite
+                        Select your current location
                     </div>
                 </div>
                 
@@ -226,31 +226,31 @@ if (!empty($user_data['address'])) {
                     </div>
                 <?php endif; ?>
                 
-                <button type="submit" class="btn" style="margin-top: 20px;">Actualizează Profilul</button>
+                <button type="submit" class="btn" style="margin-top: 20px;">Update Profile</button>
             </form>
         </div>
 
         <div class="profile-form">
-            <h2>Schimbă Parola</h2>
+            <h2>Change Password</h2>
             <form method="POST">
                 <input type="hidden" name="action" value="change_password">
                 
                 <div class="form-group">
-                    <label for="current_password">Parola Curentă:</label>
+                    <label for="current_password">Current password:</label>
                     <input type="password" id="current_password" name="current_password" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="new_password">Parola Nouă:</label>
+                    <label for="new_password">New password:</label>
                     <input type="password" id="new_password" name="new_password" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="confirm_password">Confirmă Parola Nouă:</label>
+                    <label for="confirm_password">Confirm new password:</label>
                     <input type="password" id="confirm_password" name="confirm_password" required>
                 </div>
                 
-                <button type="submit" class="btn">Schimbă Parola</button>
+                <button type="submit" class="btn">Change Password</button>
             </form>
         </div>
     </main>

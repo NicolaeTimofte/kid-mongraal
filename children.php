@@ -7,14 +7,54 @@ $message = '';
 $message_type = '';
 $children = [];
 
+$locations = [
+    'JUNK_JUNCTION' => ['x' => 171, 'y' => 127, 'name' => 'Junk Junction'],
+    'HAUNTED_HILLS' => ['x' => 145, 'y' => 228, 'name' => 'Haunted Hills'],
+    'PLEASANT_PARK' => ['x' => 261, 'y' => 324, 'name' => 'Pleasant Park'],
+    'SNOBBY_SHORES' => ['x' => 90, 'y' => 428, 'name' => 'Snobby Shores'],
+    'GREASY_GROVE' => ['x' => 247, 'y' => 659, 'name' => 'Greasy Grove'],
+    'SHIFTY_SHAFTS' => ['x' => 392, 'y' => 664, 'name' => 'Shifty Shafts'],
+    'FROSTY_FLIGHTS' => ['x' => 110, 'y' => 753, 'name' => 'Frosty Flights'],
+    'FLUSH_FACTORY' => ['x' => 370, 'y' => 895, 'name' => 'Flush Factory'],
+    'LUCKY_LANDING' => ['x' => 586, 'y' => 965, 'name' => 'Lucky Landing'],
+    'FATAL_FIELDS' => ['x' => 625, 'y' => 790, 'name' => 'Fatal Fields'],
+    'SALTY_SPRINGS' => ['x' => 608, 'y' => 631, 'name' => 'Salty Springs'],
+    'DUSTY_DIVOT' => ['x' => 603, 'y' => 503, 'name' => 'Dusty Divot'],
+    'LOOT_LAKE' => ['x' => 448, 'y' => 318, 'name' => 'Loot Lake'],
+    'TILTED_TOWERS' => ['x' => 405, 'y' => 494, 'name' => 'Tilted Towers'],
+    'LAZY_LINKS' => ['x' => 556, 'y' => 205, 'name' => 'Lazy Links'],
+    'RISKY_REELS' => ['x' => 774, 'y' => 218, 'name' => 'Risky Reels'],
+    'WAILING_WOODS' => ['x' => 863, 'y' => 302, 'name' => 'Wailing Woods'],
+    'TOMATO_TEMPLE' => ['x' => 684, 'y' => 326, 'name' => 'Tomato Temple'],
+    'LONELY_LODGE' => ['x' => 919, 'y' => 413, 'name' => 'Lonely Lodge'],
+    'RETAIL_ROW' => ['x' => 762, 'y' => 545, 'name' => 'Retail Row'],
+    'PARADISE_PALMS' => ['x' => 864, 'y' => 762, 'name' => 'Paradise Palms']
+];
+
+function getLocationCoordinates($locationName, $locations) {
+    $cleanInput = strtoupper(trim($locationName));
+    $locationKey = str_replace(' ', '_', $cleanInput);
+    
+    if (isset($locations[$locationKey])) {
+        return $locations[$locationKey];
+    }
+    
+    foreach ($locations as $key => $location) {
+        if ($cleanInput === strtoupper($location['name'])) {
+            return $location;
+        }
+    }
+    
+    return null;
+}
+
 try {
     $stmt = $pdo->prepare("SELECT * FROM children WHERE user_id = :user_id ORDER BY id DESC");
     $stmt->bindParam(':user_id', $_SESSION['user_id']);
     $stmt->execute();
     $children = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    error_log("Error fetching children: " . $e->getMessage());
-    $message = 'Eroare la încărcarea copiilor';
+    $message = 'Error fetching children';
     $message_type = 'error';
 }
 
@@ -26,10 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gender = trim($_POST['gender'] ?? '');
         
         if (empty($first_name) || empty($last_name) || empty($birthdate)) {
-            $message = 'Numele, prenumele și data nașterii sunt obligatorii';
+            $message = 'First name, last name and birthdate are mandatory';
             $message_type = 'error';
         } else {
             try {
+                $pdo->beginTransaction();
+                
                 $birthdate_formatted = date('Y-m-d', strtotime($birthdate));
                 
                 $stmt = $pdo->prepare("INSERT INTO children (user_id, first_name, last_name, birthdate, gender) VALUES (:user_id, :first_name, :last_name, TO_DATE(:birthdate, 'YYYY-MM-DD'), :gender)");
@@ -40,77 +82,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bindParam(':gender', $gender);
                 $stmt->execute();
                 
-                $message = 'Copilul a fost adăugat cu succes';
+                $stmt = $pdo->prepare("SELECT MAX(id) as child_id FROM children WHERE user_id = :user_id");
+                $stmt->bindParam(':user_id', $_SESSION['user_id']);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if (isset($result['CHILD_ID'])) {
+                    $child_id = $result['CHILD_ID'];
+                } elseif (isset($result['child_id'])) {
+                    $child_id = $result['child_id'];
+                } else {
+                    $child_id = reset($result);
+                }
+                
+                $stmt = $pdo->prepare("SELECT address, latitude, longitude FROM users WHERE id = :user_id");
+                $stmt->bindParam(':user_id', $_SESSION['user_id']);
+                $stmt->execute();
+                $parent = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                $parentAddress = '';
+                if (!empty($parent['ADDRESS'])) {
+                    $parentAddress = $parent['ADDRESS'];
+                } elseif (!empty($parent['address'])) {
+                    $parentAddress = $parent['address'];
+                }
+                
+                if (!empty($parentAddress)) {
+                    $locationData = getLocationCoordinates($parentAddress, $locations);
+                    
+                    if ($locationData) {
+                        $stmt = $pdo->prepare("INSERT INTO data (child_id, location, latitude, longitude) VALUES (:child_id, :location, :latitude, :longitude)");
+                        $stmt->bindParam(':child_id', $child_id);
+                        $stmt->bindParam(':location', $locationData['name']);
+                        $stmt->bindParam(':latitude', $locationData['x']);
+                        $stmt->bindParam(':longitude', $locationData['y']);
+                        $stmt->execute();
+                    } else {
+                        if (!empty($parent['LATITUDE']) && !empty($parent['LONGITUDE'])) {
+                            $stmt = $pdo->prepare("INSERT INTO data (child_id, location, latitude, longitude) VALUES (:child_id, :location, :latitude, :longitude)");
+                            $stmt->bindParam(':child_id', $child_id);
+                            $stmt->bindParam(':location', $parentAddress);
+                            $stmt->bindParam(':latitude', $parent['LATITUDE']);
+                            $stmt->bindParam(':longitude', $parent['LONGITUDE']);
+                            $stmt->execute();
+                        }
+                    }
+                }
+                
+                $pdo->commit();
+                
+                $message = 'Child successfully added';
                 $message_type = 'success';
                 
                 $stmt = $pdo->prepare("SELECT * FROM children WHERE user_id = :user_id ORDER BY id DESC");
                 $stmt->bindParam(':user_id', $_SESSION['user_id']);
                 $stmt->execute();
                 $children = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
             } catch (PDOException $e) {
-                error_log("Error adding child: " . $e->getMessage());
-                $message = 'Eroare la adăugarea copilului';
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                $message = 'Error adding child';
                 $message_type = 'error';
             }
         }
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'get_max_dist' && isset($_POST['child_id'])) {
-        $child_id = intval($_POST['child_id']);
-        
-        try {
-            $stmt = $pdo->prepare("
-                DECLARE 
-                    v_result VARCHAR2(4000);
-                BEGIN 
-                    v_result := max_dist_acc(:child_id);
-                    :result := v_result;
-                END;
-            ");
-            
-            $result = '';
-            $stmt->bindParam(':child_id', $child_id, PDO::PARAM_INT);
-            $stmt->bindParam(':result', $result, PDO::PARAM_STR, 4000);
-            $stmt->execute();
-            
-            if (!empty($result) && $result !== 'NULL' && trim($result) !== '') {
-                $_SESSION['max_dist_result_' . $child_id] = $result;
-                $message = 'Distanța maximă a fost calculată cu succes';
-                $message_type = 'success';
-            } else {
-                $stmt2 = $pdo->prepare("SELECT max_dist_acc(:child_id) AS max_distance FROM dual");
-                $stmt2->bindParam(':child_id', $child_id, PDO::PARAM_INT);
-                $stmt2->execute();
-                $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                
-                if ($result2 && isset($result2['MAX_DISTANCE']) && !empty($result2['MAX_DISTANCE'])) {
-                    $_SESSION['max_dist_result_' . $child_id] = $result2['MAX_DISTANCE'];
-                    $message = 'Distanța maximă a fost calculată cu succes';
-                    $message_type = 'success';
-                } else {
-                    $message = 'Nu s-au găsit date pentru acest copil';
-                    $message_type = 'error';
-                }
-            }
-            
-            $stmt = $pdo->prepare("SELECT * FROM children WHERE user_id = :user_id ORDER BY id DESC");
-            $stmt->bindParam(':user_id', $_SESSION['user_id']);
-            $stmt->execute();
-            $children = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error calling max_dist_acc: " . $e->getMessage());
-            $message = 'Eroare la calcularea distanței';
-            $message_type = 'error';
-        }
-    }
-}
-
-function getMaxDistanceResult($child_id)
-{
-    if (isset($_SESSION['max_dist_result_' . $child_id])) {
-        $result = $_SESSION['max_dist_result_' . $child_id];
-        unset($_SESSION['max_dist_result_' . $child_id]);
-        return $result;
-    }
-    return null;
+    } 
 }
 
 function calculateAge($birthdate)
@@ -123,11 +160,11 @@ function calculateAge($birthdate)
         $age = $today->diff($birth);
         
         if ($age->y > 0) {
-            return $age->y . ' ani';
+            return $age->y . ' years';
         } elseif ($age->m > 0) {
-            return $age->m . ' luni';
+            return $age->m . ' months';
         } else {
-            return $age->d . ' zile';
+            return $age->d . ' days';
         }
     } catch (Exception $e) {
         return 'N/A';
@@ -140,15 +177,15 @@ function calculateAge($birthdate)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copii - KiD</title>
+    <title>KiM - Children</title>
     <link rel="stylesheet" href="css/mainchildren.css">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Copii - <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
+            <h1>Children - <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
             <div>
-                <a href="index.php" class="btn">Acasă</a>
+                <a href="index.php" class="home-btn">Map Page</a>
             </div>
         </nav>
     </header>
@@ -162,50 +199,50 @@ function calculateAge($birthdate)
             <?php endif; ?>
 
             <div class="add-child-form">
-                <h2>Adaugă Copil Nou</h2>
+                <h2>Add New Child</h2>
                 <form method="POST">
                     <input type="hidden" name="action" value="add_child">
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="first_name">Prenume:</label>
+                            <label for="first_name">First Name:</label>
                             <input type="text" id="first_name" name="first_name" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="last_name">Nume:</label>
+                            <label for="last_name">Last Name:</label>
                             <input type="text" id="last_name" name="last_name" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="birthdate">Data Nașterii:</label>
+                            <label for="birthdate">Birthdate:</label>
                             <input type="date" id="birthdate" name="birthdate" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="gender">Gen:</label>
+                            <label for="gender">Gender:</label>
                             <select id="gender" name="gender">
-                                <option value="">Selectează</option>
-                                <option value="M">Masculin</option>
-                                <option value="F">Feminin</option>
+                                <option value="">Select</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
                             </select>
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn">Adaugă Copil</button>
+                    <button type="submit" class="btn">Add Child</button>
                 </form>
             </div>
 
             <div class="total-count">
-                <h2>Total Copii: <?php echo count($children); ?></h2>
+                <h2>Total Children: <?php echo count($children); ?></h2>
             </div>
 
             <?php if (empty($children)): ?>
                 <div class="no-children">
-                    <h3>Nu aveți copii înregistrați</h3>
-                    <p>Utilizați formularul de mai sus pentru a adăuga primul copil.</p>
+                    <h3>No children registered</h3>
+                    <p>Use the form above to add your first child.</p>
                 </div>
             <?php else: ?>
                 <div class="children-grid">
@@ -217,7 +254,7 @@ function calculateAge($birthdate)
                             
                             <div class="child-info">
                                 <div class="info-item">
-                                    <span class="info-label">Data Nașterii:</span>
+                                    <span class="info-label">Birthdate:</span>
                                     <span class="info-value">
                                         <?php 
                                         $birthdate = $child['BIRTHDATE'] ?? $child['birthdate'] ?? '';
@@ -229,14 +266,14 @@ function calculateAge($birthdate)
                                                 echo htmlspecialchars($birthdate);
                                             }
                                         } else {
-                                            echo 'Nespecificată';
+                                            echo 'Unspecified';
                                         }
                                         ?>
                                     </span>
                                 </div>
                                 
                                 <div class="info-item">
-                                    <span class="info-label">Vârsta:</span>
+                                    <span class="info-label">Age:</span>
                                     <span class="info-value">
                                         <?php echo calculateAge($child['BIRTHDATE'] ?? $child['birthdate'] ?? ''); ?>
                                     </span>
@@ -244,31 +281,12 @@ function calculateAge($birthdate)
                                 
                                 <?php if (!empty($child['GENDER'] ?? $child['gender'])): ?>
                                 <div class="info-item">
-                                    <span class="info-label">Gen:</span>
+                                    <span class="info-label">Gender:</span>
                                     <span class="info-value">
                                         <?php echo htmlspecialchars($child['GENDER'] ?? $child['gender'] ?? ''); ?>
                                     </span>
                                 </div>
                                 <?php endif; ?>
-                                
-                                <div class="info-item">
-                                    <span class="info-label">Distanță Max:</span>
-                                    <span class="info-value">
-                                        <form method="POST" style="display: inline;">
-                                            <input type="hidden" name="action" value="get_max_dist">
-                                            <input type="hidden" name="child_id" value="<?php echo $child['ID'] ?? $child['id']; ?>">
-                                            <button type="submit" class="btn-small">Calculează</button>
-                                        </form>
-                                        <?php 
-                                        $max_dist_result = getMaxDistanceResult($child['ID'] ?? $child['id']);
-                                        if ($max_dist_result !== null): 
-                                        ?>
-                                            <div class="distance-result">
-                                                <div class="distance-simple"><?php echo htmlspecialchars($max_dist_result); ?></div>
-                                            </div>
-                                        <?php endif; ?>
-                                    </span>
-                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
