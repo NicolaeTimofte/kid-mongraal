@@ -177,6 +177,9 @@ main p {
     width: 540px;
     height: fit-content;
     flex-shrink: 0;
+
+    width: 100%;
+    max-width: 540px;
 }
 
 .parent-info-box {
@@ -187,12 +190,18 @@ main p {
     width: 540px;
     height: fit-content;
     flex-shrink: 0;
+
+    width: 100%;
+    max-width: 540px;
 }
 
 .info-boxes-container {
     display: flex;
     gap: 56px;
     flex-direction: row;
+
+    flex-wrap: wrap;
+    justify-content: center; 
 }
 
 .accident-info-box h3,
