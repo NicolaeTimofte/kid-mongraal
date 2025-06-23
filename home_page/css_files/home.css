@@ -36,7 +36,7 @@ body {
   margin: 0 auto;
 }
 
-.other-actions button{
+.btn-memberships{
   padding: 8px 16px;
   font-size: 0.95rem;
   background: #333;
@@ -46,9 +46,10 @@ body {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.4s ease;
+  text-decoration: none !important;
 }
 
-.other-actions button:hover{
+.btn-memberships:hover{
   background-color: #00ccff;
 }
 
