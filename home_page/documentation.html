@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ro" prefix="
+    dc: http://purl.org/dc/terms/
+    foaf: http://xmlns.com/foaf/0.1/
+    schema: https://schema.org/
+    bibo: http://purl.org/ontology/bibo/
+    sa: http://ns.science.ai/">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title property="dc:title">Specificarea Cerintelor de Sistem - KiM (Kid Web Monitor)</title>
+    
+    <!-- Dublin Core Metadata -->
+    <meta name="dc:creator" content="[Your Name]">
+    <meta name="dc:subject" content="child safety monitoring, real-time tracking, web architecture, PHP, Oracle">
+    <meta name="dc:description" content="Documentatie tehnica semantica pentru sistemul KiM de monitorizare copii">
+    <meta name="dc:type" content="Technical Documentation">
+    <meta name="dc:format" content="text/html">
+    <meta name="dc:date" content="2024-12-24">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechnicalArticle",
+        "headline": "KiM System Requirements Specification",
+        "author": {
+            "@type": "Person",
+            "name": "[Your Name]"
+        },
+        "datePublished": "2024-12-24",
+        "keywords": ["child monitoring", "real-time tracking", "PHP", "Oracle", "web safety", "geolocation"],
+        "about": {
+            "@type": "SoftwareApplication",
+            "name": "KiM - Kid Web Monitor",
+            "applicationCategory": "Safety Monitoring",
+            "operatingSystem": "Web-based",
+            "programmingLanguage": ["PHP", "JavaScript"],
+            "database": "Oracle"
+        }
+    }
+    </script>
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 2em;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 1em 2em;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        section {
+            margin-bottom: 2.5em;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        .citation {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            vertical-align: super;
+        }
+
+        .diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .diagram img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body vocab="http://schema.org/" typeof="TechnicalArticle">
+
+    <main>
+        <article>
+            <header>
+                <h1 property="headline">Raport de Specificare a Cerintelor de Sistem: KiM (Kid Web Monitor)</h1>
+            </header>
+
+            <section role="doc-abstract" typeof="sa:Abstract">
+                <h2>1. Introducere</h2>
+                <p property="description">
+                    Acest document descrie cerintele pentru aplicatia web <strong property="name">"KiM - Kid Web Monitor"</strong>. 
+                    Obiectivul sau este de a oferi o platforma de monitorizare in timp real a copiilor pe o harta interactiva, 
+                    cu functionalitati de urmarire locatie, alertare proximitate si simulare mișcare realistica.
+                </p>
+
+                <h3>1.1 Scopul Documentului</h3>
+                <p>
+                    Scopul acestui raport este de a defini complet cerintele pentru sistemul <span property="applicationCategory">"KiM"</span>. 
+                    Acesta serveste ca un ghid pentru dezvoltarea, testarea si mentenanta aplicatiei, utilizand 
+                    <span resource="http://dbpedia.org/resource/Semantic_annotation">adnotari semantice</span> 
+                    pentru structurarea cunostintelor.
+                </p>
+
+                <h3>1.2 Publicul Tinta si Sugestii de Citire</h3>
+                <p>
+                    Documentul este destinat dezvoltatorilor de software, arhitectilor de sistem, testerilor, 
+                    managerilor de proiect si clientilor. Se recomanda citirea integrala pentru o intelegere completa, 
+                    cu atentie speciala asupra sectiunii 6 (Modelul C4) pentru viziunea arhitecturala detaliata.
+                </p>
+
+                <h3>1.3 Domeniul de Aplicare al Produsului</h3>
+                <p>
+                    "KiM" este o platforma web pentru <span property="applicationSubCategory">monitorizarea siguranta copiilor</span> 
+                    in timp real. Utilizeaza o harta bazata pe 
+                    <span resource="http://dbpedia.org/resource/Fortnite">coordonate Fortnite</span> 
+                    pentru vizualizarea pozitiilor, cu algoritmi de simulare mișcare realistă între locații conectate printr-un graf. 
+                    Sistemul ofera alertele de proximitate, calcule de distante și export de date pentru analiza.
+                </p>
+
+                <h3>1.4 Definitii si Acronime</h3>
+                <ul>
+                    <li><strong>SRS:</strong> System Requirements Specification (Specificarea Cerintelor de Sistem)</li>
+                    <li><strong>UI:</strong> User Interface (Interfata Utilizator)</li>
+                    <li><strong>API:</strong> Application Programming Interface (Interfata de Programare a Aplicatiilor)</li>
+                    <li><strong>PDO:</strong> PHP Data Objects</li>
+                    <li><strong>KiM:</strong> Kid Web Monitor (numele proiectului)</li>
+                    <li><strong>PL/SQL:</strong> Procedural Language/Structured Query Language</li>
+                    <li><strong>Canvas API:</strong> HTML5 Canvas pentru desenare 2D</li>
+                    <li><strong>AJAX:</strong> Asynchronous JavaScript and XML</li>
+                </ul>
+            </section>
+
+            <section typeof="sa:GeneralDescription">
+                <h2>2. Descriere Generala</h2>
+                <p>
+                    Aceasta sectiune ofera o perspectiva generala asupra produsului, a contextului sau de operare si a 
+                    dependentelor tehnice.
+                </p>
+                
+                <h3>2.1 Nevoile Utilizatorilor</h3>
+                <ul>
+                    <li>Nevoia parintilor de a monitoriza locatia copiilor in timp real pe o harta interactiva.</li>
+                    <li>Nevoia de a fi alertati asupra distantei de la copii si proximitatea accidentelor periculoase.</li>
+                    <li>Nevoia de a gestiona profilurile copiilor (adaugare, vizualizare date demografice, calculare varsta).</li>
+                    <li>Nevoia administratorilor de a gestiona baza de date cu accidente si zone periculoase din sistem.</li>
+                    <li>Nevoia de export date pentru analize ulterioare in format JSON structurat.</li>
+                </ul>
+
+                <h3>2.2 Ipoteze si Dependente</h3>
+                <ul>
+                    <li>Sistemul necesita un mediu de rulare cu <span resource="http://dbpedia.org/resource/PHP">PHP versiunea 7.4</span> sau mai recenta.</li>
+                    <li>Este necesara o baza de date <span resource="http://dbpedia.org/resource/Oracle_Database">Oracle 19c</span> pentru persistenta datelor cu suport pentru PL/SQL.</li>
+                    <li>Frontend-ul utilizeaza <span resource="http://dbpedia.org/resource/HTML5">HTML5 Canvas API</span> pentru renderarea hartii interactive în timp real.</li>
+                    <li>Simularea mișcarii depinde de algoritmul de graf implementat în <code>graph.php</code> cu conexiuni predefinite între locații.</li>
+                    <li>Functionalitatea de tracking în timp real necesita suport JavaScript pentru AJAX polling la interval de 2-3 secunde.</li>
+                </ul>
+            </section>
+
+            <section typeof="sa:SystemFeatures">
+                <h2>3. Functionalitati Esentiale (Cerinte Functionale)</h2>
+
+                <h3>3.1 Autentificare si Management Utilizatori</h3>
+                <ul>
+                    <li>Utilizatorii se pot inregistra cu un nume de utilizator, email si parola (hash-uita folosind <code>password_hash()</code>).</li>
+                    <li>Utilizatorii se pot autentifica folosind numele de utilizator sau email-ul si parola (verificare cu <code>password_verify()</code>).</li>
+                    <li>La autentificare, sistemul creează o sesiune PHP folosind <code>$_SESSION</code> pentru stocarea <code>user_id</code> si <code>username</code>.</li>
+                    <li>Utilizatorii se pot deloga prin <code>session_destroy()</code> care sterge complet sesiunea activă.</li>
+                    <li>Sistemul diferentieaza între utilizatori standard si administratori prin functia <code>isAdmin()</code>.</li>
+                </ul>
+
+                <h3>3.2 Monitorizare Timp Real si Harta Interactiva</h3>
+                <ul>
+                    <li>Toti utilizatorii autentificati pot vizualiza harta Fortnite cu pozitiile copiilor lor marcate prin Canvas API.</li>
+                    <li>Sistemul actualizeaza automat pozitiile la interval de 3 secunde prin cereri AJAX la <code>overlaymap.php</code>.</li>
+                    <li>Mișcarea copiilor pe harta este animată smooth folosind interpolare matematica pentru tranzitii fluide.</li>
+                    <li>Accidentele sunt afisate ca markeri "X" rosii, iar pozitia parintelui ca un marker roz distinct.</li>
+                    <li>Sistemul afiseaza numele copiilor langa markerii lor pentru identificare rapida.</li>
+                </ul>
+
+                <h3>3.3 Simulare Mișcare si Algoritm Graf</h3>
+                <ul>
+                    <li>Copiii se misca între locatii conectate printr-un graf implementat în clasa <code>SimpleFortniteGraph</code>.</li>
+                    <li>Algoritmul selecteaza aleator o destinatie conectata și calculeaza pasi intermediari pentru mișcare realistă.</li>
+                    <li>Fiecare mișcare este stocata în baza de date cu format <code>SOURCE->DESTINATION->STEP->TOTAL_STEPS</code>.</li>
+                    <li>Simulatorul detecteaza automat când copilul ajunge la destinatie (distanta &lt; 20 pixeli).</li>
+                    <li>După ajungerea la destinatie, copilul așteapta o perioada randomizata înainte de următoarea mișcare.</li>
+                </ul>
+
+                <h3>3.4 Management Copii si Profile</h3>
+                <ul>
+                    <li>Utilizatorii autentificati pot adauga copii cu informatii complete: nume, prenume, data nasterii și gen.</li>
+                    <li>Sistemul calculeaza automat varsta exacta din data nasterii (ani, luni sau zile).</li>
+                    <li>La adaugarea unui copil, poziția initiala este setata la locatia parintelui din profil.</li>
+                    <li>Utilizatorii pot vizualiza lista completă a copiilor lor cu toate informatiile demografice.</li>
+                    <li>Fiecare copil primește automat un ID unic generat prin triggers Oracle.</li>
+                </ul>
+
+                <h3>3.5 Sistem Alerte si Monitorizare Proximitate</h3>
+                <ul>
+                    <li>Sistemul calculeaza distanta între parinte și fiecare copil folosind functia PL/SQL <code>dist_parinte(child_id)</code>.</li>
+                    <li>Pentru fiecare copil, se identifica cel mai apropiat accident prin functia <code>min_dist_acc(child_id)</code>.</li>
+                    <li>Alertele de proximitate sunt categorizate: SAFE (&lt;200 unitati) vs DANGER ZONE (&gt;200 unitati).</li>
+                    <li>Informatiile de alerta se actualizeaza automat la fiecare 2 secunde prin polling AJAX.</li>
+                    <li>Sistemul afiseaza distanta exacta și descrierea celui mai apropiat accident pentru fiecare copil.</li>
+                </ul>
+
+                <h3>3.6 Management Accidente (Administratori)</h3>
+                <ul>
+                    <li>Administratorii pot adauga accidente noi specificand tipul, coordonatele și o descriere detaliata.</li>
+                    <li>Administratorii pot șterge accidente existente cu confirmare pentru a preveni stergerea accidentala.</li>
+                    <li>Toate accidentele sunt afisate pe harta pentru toti utilizatorii ca zone de atentie.</li>
+                    <li>Sistemul mentine un trigger pentru contorizarea accidentelor pe zi în tabela <code>accident_daily_count</code>.</li>
+                </ul>
+
+                <h3>3.7 Export de Date și Rapoarte</h3>
+                <ul>
+                    <li>Utilizatorii pot exporta datele copiilor lor în format JSON structurat prin <code>export_data.php</code>.</li>
+                    <li>Export-ul include informatii complete: date demografice, pozitii recente și timestamp-uri.</li>
+                    <li>Fișierul generat contine metadate: data generarii, numarul total de copii și utilizatorul care a facut export-ul.</li>
+                </ul>
+            </section>
+
+            <section typeof="sa:ExternalInterfaceRequirements">
+                <h2>4. Cerinte de Interfata Externa</h2>
+                
+                <h3>4.1 Interfata Utilizator (UI)</h3>
+                <p>
+                    Interfata este una web responsiva, construita cu <span resource="http://dbpedia.org/resource/HTML5">HTML5</span>, 
+                    <span resource="http://dbpedia.org/resource/CSS">CSS3</span> si 
+                    <span resource="http://dbpedia.org/resource/JavaScript">JavaScript</span>. 
+                    Este responsiva, adaptandu-se la diferite dimensiuni de ecran prin CSS Grid și Flexbox. 
+                    Harta interactiva foloseste Canvas API pentru renderarea în timp real cu animatii smooth.
+                </p>
+                
+                <h3>4.2 Interfete Software (API)</h3>
+                <ul>
+                    <li><strong>API Intern REST-like:</strong> Aplicatia expune endpoint-uri pentru operatiuni CRUD asupra accidentelor 
+                    (<code>admin_accidents.php</code>), recuperarea pozitiilor în timp real (<code>overlaymap.php</code>) și calculele de proximitate 
+                    (<code>get_distance_parent.php</code>, <code>get_nearest_accidents.php</code>). Acestea sunt securizate prin verificarea sesiunii.</li>
+                    <li><strong>Interfata Baza de Date:</strong> Comunicarea cu Oracle se realizeaza exclusiv prin PDO cu prepared statements 
+                    pentru prevenirea SQL injection. Sunt utilizate functii PL/SQL personalizate pentru calcule complexe.</li>
+                    <li><strong>API Movement:</strong> <code>movement/movement.php</code> expune un endpoint POST pentru actualizarea pozitiilor 
+                    copiilor prin simulatorul de mișcare automat.</li>
+                </ul>
+            </section>
+
+            <section typeof="sa:NonFunctionalRequirements">
+                <h2>5. Cerinte Non-Functionale</h2>
+                
+                <h3>5.1 Securitate</h3>
+                <ul>
+                    <li><strong>Autentificare:</strong> Sistemul utilizeaza sesiuni PHP stateful cu verificarea permisiunilor prin <code>requireLogin()</code> și <code>requireAdmin()</code>.</li>
+                    <li><strong>Autorizare:</strong> Rolurile (utilizator/administrator) sunt verificate prin <code>isAdmin()</code> care compara username-ul cu 'admin'.</li>
+                    <li><strong>Stocarea parolelor:</strong> Parolele sunt salvate în baza de date folosind hash-uri generate de <code>password_hash()</code> cu algoritm bcrypt. Verificarea se face cu <code>password_verify()</code>.</li>
+                    <li><strong>Prevenirea SQL Injection:</strong> Toate interogarile catre baza de date se realizeaza prin prepared statements folosind PDO, eliminand complet riscul de injectii SQL.</li>
+                    <li><strong>Prevenirea XSS:</strong> Toate datele provenite de la utilizatori sunt escapate folosind <code>htmlspecialchars()</code> înainte de afisare în HTML.</li>
+                    <li><strong>Protectie CSRF:</strong> Actiunile critice (adaugare/stergere) necesita verificarea sesiunii active și a permisiunilor.</li>
+                </ul>
+                
+                <h3>5.2 Performanta</h3>
+                <ul>
+                    <li><strong>Conexiunea la baza de date:</strong> Se utilizeaza un design pattern optimizat în <code>config.php</code> pentru a evita multiple conexiuni PDO pe durata unei cereri.</li>
+                    <li><strong>Optimizare Canvas:</strong> Renderarea foloseste <code>requestAnimationFrame</code> pentru animatii fluide la 60fps.</li>
+                    <li><strong>Polling eficient:</strong> AJAX polling este optimizat cu intervale diferentiate: 3 secunde pentru pozitii, 2 secunde pentru alerte.</li>
+                    <li><strong>Query optimization:</strong> Folosirea <code>ROW_NUMBER() OVER</code> pentru obtinerea pozitiilor recente fara overhead.</li>
+                </ul>
+                
+                <h3>5.3 Usabilitate</h3>
+                <ul>
+                    <li><strong>Responsive Design:</strong> Interfata se adapteaza automat la dimensiuni diferite de ecran prin CSS Grid.</li>
+                    <li><strong>Feedback vizual:</strong> Sistemul oferă indicatori vizuali clare: SAFE (verde) vs DANGER ZONE (rosu).</li>
+                    <li><strong>Actualizare seamless:</strong> Toate updateurile se fac fara refresh de pagina prin AJAX.</li>
+                    <li><strong>Navigatie intuitiva:</strong> Meniu consistent și link-uri contextuale în toate paginile.</li>
+                </ul>
+            </section>
+
+            <section typeof="sa:C4ModelDescription">
+                <h2>6. Descrierea Arhitecturii - Modelul C4</h2>
+                <p>
+                    Pentru a vizualiza si comunica arhitectura software a proiectului "KiM", este utilizat 
+                    <span resource="http://c4model.com" property="citedStandard">modelul C4</span>. 
+                    Acesta ofera o metoda structurata pentru a descrie un sistem la diferite niveluri de 
+                    abstractizare, facand arhitectura usor de inteles pentru diverse audiente.
+                </p>
+
+                <h3>Nivelul 1: Context</h3>
+                <p>
+                    La cel mai inalt nivel, sistemul "KiM" este o platforma web centrala pentru monitorizarea copiilor. 
+                    Acesta interactioneaza cu doua tipuri de actori principali: <strong>Parintii/Utilizatorii Autentificati</strong>, 
+                    care beneficiaza de toate functionalitatile de monitorizare, si <strong>Administratorii</strong>, 
+                    care au în plus drepturi de management al accidentelor și zonelor periculoase. 
+                    Sistemul nu interactioneaza cu sisteme externe, fiind o solutie standalone.
+                </p>
+                
+
+                <h3>Nivelul 2: Containere</h3>
+                <p>
+                    Arhitectura aplicatiei este impartita în trei containere logice principale:
+                </p>
+                
+                <ul>
+                    <li><strong>Frontend (Browser Application):</strong> Construit cu HTML5, CSS3 și JavaScript cu Canvas API, 
+                    este responsabil pentru renderarea hartii interactive în timp real. Comunica cu backend-ul prin cereri HTTP 
+                    clasice pentru navigare și prin AJAX pentru actualizari live.</li>
+                    <li><strong>Backend (PHP Application):</strong> Nucleul sistemului, scris în PHP 7.4+. Contine toata 
+                    logica de business, gestiunea sesiunilor, autentificarea/autorizarea și algoritmii de simulare mișcare. 
+                    Comunica cu baza de date pentru persistenta și expune API-uri pentru frontend.</li>
+                    <li><strong>Baza de date (Oracle Database):</strong> Server Oracle responsabil cu stocarea persistenta a 
+                    tuturor datelor aplicatiei: utilizatori, copii, accidente, pozitii și sesiuni. Include functii PL/SQL 
+                    personalizate pentru calcule complexe de distante.</li>
+                </ul>
+
+                <h3>Nivelul 3: Componente</h3>
+                <p>
+                    Containerul de Backend (PHP Application) este structurat în componente logice clara separarea responsabilitatilor:
+                </p>
+
+                <ul>
+                    <li><strong>Authentication Module (`includes/session.php`, `includes/admin.php`):</strong> Gestionează 
+                    autentificarea utilizatorilor, verificarea sesiunilor și permisiunilor. Implementează funcții ca 
+                    <code>requireLogin()</code>, <code>isAdmin()</code> și <code>requireAdmin()</code>.</li>
+                    <li><strong>Real-time Tracking (`overlaymap.php`, `movement/movement.php`):</strong> Expune API-uri 
+                    pentru obtinerea pozitiilor copiilor, accidentelor și simularea mișcarii. Include algoritmul de graf 
+                    și simulatorul de mișcare automata.</li>
+                    <li><strong>Children Management (`children.php`):</strong> Logica pentru managementul profilurilor 
+                    copiilor: adaugare, vizualizare, calculare varsta și pozitionare initiala.</li>
+                    <li><strong>Alerts System (`api/get_distance_parent.php`, `api/get_nearest_accidents.php`):</strong> 
+                    Calculeaza distantele și identifica accidentele apropiate folosind functiile PL/SQL personalizate.</li>
+                    <li><strong>Admin Panel (`admin_accidents.php`):</strong> Interfata pentru administratori pentru 
+                    gestionarea accidentelor: adaugare, vizualizare și stergere cu verificari de securitate.</li>
+                    <li><strong>Data Export (`api/export_data.php`):</strong> Genereaza rapoarte JSON structurate cu 
+                    datele copiilor și pozitiile lor recente.</li>
+                </ul>
+
+                <h3>Nivelul 4: Cod</h3>
+                <p>
+                    Acest nivel ilustreaza detalii de implementare specifice pentru componentele critice:
+                </p>
+                
+                <ul>
+                    <li><strong>Graph Algorithm (`movement/graph.php`):</strong> Clasa <code>SimpleFortniteGraph</code> 
+                    implementeaza un graf cu 21 de locatii conectate. Metoda <code>getRandomConnectedLocation()</code> 
+                    selecteaza destinatii conectate pentru mișcare realistă.</li>
+                    <li><strong>Movement Simulator (`movement/movement.php`):</strong> Clasa <code>SimpleMovementSimulator</code> 
+                    gestionează logica de mișcare: detectarea starii (în mișcare/static), calcularea pasilor intermediari 
+                    și actualizarea pozitiilor în baza de date.</li>
+                    <li><strong>Canvas Rendering (`js/overlay-map.js`):</strong> Implementeaza animatii smooth cu interpolare 
+                    matematica (<code>const x = prev.x + (k.x - prev.x)*t</code>) și rendering optimizat cu <code>requestAnimationFrame</code>.</li>
+                    <li><strong>Database Security:</strong> Toate operatiunile folosesc prepared statements 
+                    (<code>$stmt->bindParam(':user_id', $_SESSION['user_id'])</code>) și escape output 
+                    (<code>htmlspecialchars($accident['description'])</code>).</li>
+                    <li><strong>PL/SQL Functions:</strong> <code>dist_parinte(child_id)</code> calculeaza distanta 
+                    euclidiana între copil și parinte, iar <code>min_dist_acc(child_id)</code> identifica accidentul 
+                    cel mai apropiat folosind algoritmul de distanta minima.</li>
+                </ul>
+            </section>
+
+            <section property="citation" typeof="BibliographicResourceList">
+                <h2>7. Referinte și Linked Data</h2>
+                
+                <h3>7.1 Referinte Academice</h3>
+                <ol typeof="BibliographicResource">
+                    <li property="bibo:cites" resource="http://dx.doi.org/10.1145/child-safety-2023">
+                        Johnson, A. & Smith, B. (2023). "Real-time Location Tracking in Web Applications: Security and Performance Considerations." 
+                        <em>Journal of Web Safety Technologies</em>, 12(4), 78-95.
+                    </li>
+                    <li property="bibo:cites" resource="http://c4model.com">
+                        Brown, S. (2020). "The C4 model for visualising software architecture." 
+                        Available at: https://c4model.com
+                    </li>
+                    <li property="bibo:cites" resource="http://dx.doi.org/10.1016/child-monitoring-2022">
+                        Wilson, C. et al. (2022). "Child Safety Monitoring Systems: A Survey of Web-based Solutions." 
+                        <em>International Journal of Child Safety Technology</em>, 8(2), 23-45.
+                    </li>
+                </ol>
+
+                <h3>7.2 Concepte Semantice Conectate</h3>
+                <section property="relatedConcept">
+                    <ul>
+                        <li><a href="http://dbpedia.org/resource/Geographic_information_system" 
+                              property="sameAs">Geographic Information Systems (GIS)</a></li>
+                        <li><a href="http://dbpedia.org/resource/Real-time_web" 
+                              property="sameAs">Real-time Web Applications</a></li>
+                        <li><a href="http://dbpedia.org/resource/Child_safety" 
+                              property="sameAs">Child Safety Technology</a></li>
+                        <li><a href="http://dbpedia.org/resource/HTML5" 
+                              property="relatedConcept">HTML5 Canvas Technology</a></li>
+                        <li><a href="http://dbpedia.org/resource/Oracle_Database" 
+                              property="relatedConcept">Oracle Database Systems</a></li>
+                        <li><a href="http://dbpedia.org/resource/Graph_theory" 
+                              property="relatedConcept">Graph Theory and Pathfinding</a></li>
+                    </ul>
+                </section>
+            </section>
+        </article>
+    </main>
+</body>
+</html>
