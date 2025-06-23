@@ -76,7 +76,7 @@ class SimpleFortniteGraph {
     public function findLocationByCoordinates($x, $y, $tolerance = 50) {
         foreach ($this->locations as $id => $location) {
             if (abs($location['x'] - $x) < $tolerance && abs($location['y'] - $y) < $tolerance) {
-                return $id;
+                return $id;//returning the name of the location (ex: RETAIL_ROW)
             }
         }
         return null;

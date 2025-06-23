@@ -3,8 +3,8 @@
 $host = 'localhost';
 $port = '1521'; 
 $service_name = 'XE'; 
-$username = 'websitedb';
-$password = 'WEBSITEDB';
+$username = 'STUDENT';
+$password = 'STUDENT';
 
 try {
     $dsn = "oci:dbname={$host}:{$port}/{$service_name}";

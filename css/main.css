@@ -142,3 +142,29 @@ main p {
     background: #ff028d;
 }
 
+.accident-marker {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.accident-marker::before,
+.accident-marker::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #e74c3c;
+    top: 50%;
+    left: 0;
+    transform-origin: center;
+}
+
+.accident-marker::before {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.accident-marker::after {
+    transform: translateY(-50%) rotate(-45deg);
+}

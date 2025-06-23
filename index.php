@@ -47,6 +47,7 @@ requireLogin();
         </div>
     </div>
 </main>
+<script src="js/movement.js"></script>
 <script src="js/overlay-map.js"></script>
 </body>
 </html>

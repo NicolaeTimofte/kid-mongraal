@@ -1,0 +1,16 @@
+DROP TRIGGER trg_accident_daily_count;
+DROP TRIGGER trg_accidents_id;
+DROP TRIGGER trg_data_id;
+DROP TRIGGER trg_children_id;
+DROP TRIGGER trg_users_id;
+
+DROP SEQUENCE accidents_seq;
+DROP SEQUENCE data_seq;
+DROP SEQUENCE children_seq;
+DROP SEQUENCE users_seq;
+
+DROP TABLE accident_daily_count CASCADE CONSTRAINTS;
+DROP TABLE accidents CASCADE CONSTRAINTS;
+DROP TABLE data  CASCADE CONSTRAINTS;
+DROP TABLE children CASCADE CONSTRAINTS;
+DROP TABLE users CASCADE CONSTRAINTS;
