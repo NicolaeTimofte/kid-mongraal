@@ -1,6 +1,6 @@
 <?php
 require_once 'includes/session.php';
-require_once 'includes/admin.php'
+require_once 'includes/admin.php';
 requireLogin();
 ?>
 

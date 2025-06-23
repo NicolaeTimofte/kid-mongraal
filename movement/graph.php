@@ -10,27 +10,27 @@ class SimpleFortniteGraph {
     
     private function initializeLocations() {
         $this->locations = [
-            'JUNK_JUNCTION' => ['x' => 189, 'y' => 110, 'name' => 'Junk Junction'],
-            'HAUNTED_HILLS' => ['x' => 156, 'y' => 169, 'name' => 'Haunted Hills'],
-            'PLEASANT_PARK' => ['x' => 180, 'y' => 301, 'name' => 'Pleasant Park'],
-            'SNOBBY_SHORES' => ['x' => 69, 'y' => 467, 'name' => 'Snobby Shores'],
-            'GREASY_GROVE' => ['x' => 180, 'y' => 635, 'name' => 'Greasy Grove'],
-            'SHIFTY_SHAFTS' => ['x' => 280, 'y' => 695, 'name' => 'Shifty Shafts'],
-            'FROSTY_FLIGHTS' => ['x' => 69, 'y' => 775, 'name' => 'Frosty Flights'],
-            'FLUSH_FACTORY' => ['x' => 280, 'y' => 835, 'name' => 'Flush Factory'],
-            'LUCKY_LANDING' => ['x' => 400, 'y' => 950, 'name' => 'Lucky Landing'],
-            'FATAL_FIELDS' => ['x' => 500, 'y' => 807, 'name' => 'Fatal Fields'],
-            'SALTY_SPRINGS' => ['x' => 570, 'y' => 636, 'name' => 'Salty Springs'],
-            'DUSTY_DIVOT' => ['x' => 570, 'y' => 486, 'name' => 'Dusty Divot'],
-            'LOOT_LAKE' => ['x' => 400, 'y' => 390, 'name' => 'Loot Lake'],
-            'TILTED_TOWERS' => ['x' => 280, 'y' => 515, 'name' => 'Tilted Towers'],
-            'LAZY_LINKS' => ['x' => 540, 'y' => 226, 'name' => 'Lazy Links'],
-            'RISKY_REELS' => ['x' => 760, 'y' => 205, 'name' => 'Risky Reels'],
-            'WAILING_WOODS' => ['x' => 820, 'y' => 287, 'name' => 'Wailing Woods'],
-            'TOMATO_TEMPLE' => ['x' => 670, 'y' => 340, 'name' => 'Tomato Temple'],
-            'LONELY_LODGE' => ['x' => 870, 'y' => 433, 'name' => 'Lonely Lodge'],
-            'RETAIL_ROW' => ['x' => 720, 'y' => 570, 'name' => 'Retail Row'],
-            'PARADISE_PALMS' => ['x' => 870, 'y' => 767, 'name' => 'Paradise Palms']
+            'JUNK_JUNCTION' => ['x' => 171, 'y' => 127, 'name' => 'Junk Junction'],
+            'HAUNTED_HILLS' => ['x' => 145, 'y' => 228, 'name' => 'Haunted Hills'],
+            'PLEASANT_PARK' => ['x' => 261, 'y' => 324, 'name' => 'Pleasant Park'],
+            'SNOBBY_SHORES' => ['x' => 90, 'y' => 428, 'name' => 'Snobby Shores'],
+            'GREASY_GROVE' => ['x' => 247, 'y' => 659, 'name' => 'Greasy Grove'],
+            'SHIFTY_SHAFTS' => ['x' => 392, 'y' => 664, 'name' => 'Shifty Shafts'],
+            'FROSTY_FLIGHTS' => ['x' => 110, 'y' => 753, 'name' => 'Frosty Flights'],
+            'FLUSH_FACTORY' => ['x' => 370, 'y' => 895, 'name' => 'Flush Factory'],
+            'LUCKY_LANDING' => ['x' => 586, 'y' => 965, 'name' => 'Lucky Landing'],
+            'FATAL_FIELDS' => ['x' => 625, 'y' => 790, 'name' => 'Fatal Fields'],
+            'SALTY_SPRINGS' => ['x' => 608, 'y' => 631, 'name' => 'Salty Springs'],
+            'DUSTY_DIVOT' => ['x' => 603, 'y' => 503, 'name' => 'Dusty Divot'],
+            'LOOT_LAKE' => ['x' => 448, 'y' => 318, 'name' => 'Loot Lake'],
+            'TILTED_TOWERS' => ['x' => 405, 'y' => 494, 'name' => 'Tilted Towers'],
+            'LAZY_LINKS' => ['x' => 556, 'y' => 205, 'name' => 'Lazy Links'],
+            'RISKY_REELS' => ['x' => 774, 'y' => 218, 'name' => 'Risky Reels'],
+            'WAILING_WOODS' => ['x' => 863, 'y' => 302, 'name' => 'Wailing Woods'],
+            'TOMATO_TEMPLE' => ['x' => 684, 'y' => 326, 'name' => 'Tomato Temple'],
+            'LONELY_LODGE' => ['x' => 919, 'y' => 413, 'name' => 'Lonely Lodge'],
+            'RETAIL_ROW' => ['x' => 762, 'y' => 545, 'name' => 'Retail Row'],
+            'PARADISE_PALMS' => ['x' => 864, 'y' => 762, 'name' => 'Paradise Palms']
         ];
     }
     

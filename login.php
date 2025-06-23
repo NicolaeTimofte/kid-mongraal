@@ -130,26 +130,26 @@ if (isset($_GET['show']) && $_GET['show'] === 'register') {
             <h2>Login</h2>
             <form method="POST">
                 <input type="hidden" name="action" value="login">
-                <input type="text" name="username" placeholder="Username sau Email" required 
+                <input type="text" name="username" placeholder="Username or Email" required 
                        value="<?php echo isset($_POST['username']) && $_POST['action'] === 'login' ? htmlspecialchars($_POST['username']) : ''; ?>">
-                <input type="password" name="password" placeholder="Parola" required>
+                <input type="password" name="password" placeholder="Password" required>
                 <button type="submit">Login</button>
-                <p class="switch-form">Nu ai cont? <a href="?show=register">Înregistrează-te</a></p>
+                <p class="switch-form">Don't have an account? <a href="?show=register">Register</a></p>
             </form>
         </div>
 
         <div class="auth-form<?php echo !$show_register ? ' hidden' : ''; ?>" id="registerForm">
-            <h2>Înregistrare</h2>
+            <h2>Register</h2>
             <form method="POST">
                 <input type="hidden" name="action" value="register">
                 <input type="text" name="username" placeholder="Username" required 
                        value="<?php echo isset($_POST['username']) && $_POST['action'] === 'register' ? htmlspecialchars($_POST['username']) : ''; ?>">
                 <input type="email" name="email" placeholder="Email" required 
                        value="<?php echo isset($_POST['email']) && $_POST['action'] === 'register' ? htmlspecialchars($_POST['email']) : ''; ?>">
-                <input type="password" name="password" placeholder="Parola" required>
-                <input type="password" name="confirm_password" placeholder="Confirmă parola" required>
-                <button type="submit">Înregistrează-te</button>
-                <p class="switch-form">Ai deja cont? <a href="login.php">Login</a></p>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                <button type="submit">Register</button>
+                <p class="switch-form">Already have an account? <a href="login.php">Login</a></p>
             </form>
         </div>
         
